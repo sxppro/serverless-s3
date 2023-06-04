@@ -1,8 +1,8 @@
-# S4: Serverless Simple Storage Service
+# Serverless S3 (S4)
 
-**S4** is a serverless stack designed to deploy minimal [AWS](https://aws.amazon.com) resources to safely handle file upload and download for any application with different Access Control Lists for upload and download.
+This is a serverless stack designed to deploy minimal [AWS](https://aws.amazon.com) resources to safely handle file upload and download for any application with different Access Control Lists for upload and download.
 
-The three core functionalities of S4 are:
+The three core functionalities are:
 
 - **Generate S3 presigned upload URL:** Generate S3 presigned POST upload url for any user possessing a token that was previoulsy put in S4 token table.
 - **Dispatch file uploaded event:** Dispatch an event alerting that a file was uploaded. The event may then be used to trigger a lambda in your project for instance.
@@ -11,8 +11,8 @@ The three core functionalities of S4 are:
 ## Features
 
 - **Deployment ready:** set up your AWS profile and serverless deploy
-- **Security:** S3 pre-signed Urls, Lambdas to handle ACLs, the file type is verified directly after upload;
-- **Cost efficiency:** Lambdas never process any file content, files are uploaded directly to S3;
+- **Security:** S3 pre-signed Urls, Lambdas to handle ACLs, the file type is verified directly after upload
+- **Cost efficiency:** Lambdas never process any file content, files are uploaded directly to S3
 
 ## Installation and basic usage
 
@@ -25,8 +25,8 @@ yarn sls deploy
 ### Create template and deploy
 
 ```bash
-serverless create --template-url https://github.com/theodo/S4 --path myService
-cd myService && serverless deploy
+sls create --template-url https://github.com/theodo/S4 --path myService
+cd myService && sls deploy
 ```
 
 ## Tutorial: simple example to use S4
