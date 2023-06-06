@@ -1,14 +1,14 @@
-import { S3Event, S3EventRecord } from "aws-lambda";
-import EventBridge from "aws-sdk/clients/eventbridge";
-import { isEmpty } from "lodash";
-import { S3 } from "aws-sdk";
-import FileType from "file-type";
-import { makeTokenizer } from "@tokenizer/s3";
+import { makeTokenizer } from '@tokenizer/s3';
+import { S3Event, S3EventRecord } from 'aws-lambda';
+import { S3 } from 'aws-sdk';
+import EventBridge from 'aws-sdk/clients/eventbridge';
+import { fileTypeFromTokenizer } from 'file-type';
+import { isEmpty } from 'lodash';
 
-const S3Client = new S3({ signatureVersion: "v4" });
+const S3Client = new S3({ signatureVersion: 'v4' });
 const eventBridge = new EventBridge();
 
-const urlDecode = (url: string) => decodeURIComponent(url.replace(/\+/g, " "));
+const urlDecode = (url: string) => decodeURIComponent(url.replace(/\+/g, ' '));
 
 export const main = async (event: S3Event): Promise<void> => {
   const putEventsPayload = {};
@@ -16,7 +16,7 @@ export const main = async (event: S3Event): Promise<void> => {
     event.Records.map(async (eventRecord: S3EventRecord) => {
       const bucketName = eventRecord.s3.bucket.name;
       const objectKey = urlDecode(eventRecord.s3.object.key);
-      const [filePrefix, fileName] = objectKey.split("/");
+      const [filePrefix, fileName] = objectKey.split('/');
       const fileSize = eventRecord.s3.object.size;
 
       const s3Tokenizer = await makeTokenizer(S3Client, {
@@ -24,9 +24,9 @@ export const main = async (event: S3Event): Promise<void> => {
         Key: objectKey,
       });
 
-      const { ext } = await FileType.fromTokenizer(s3Tokenizer);
+      const { ext } = await fileTypeFromTokenizer(s3Tokenizer);
 
-      if (ext !== fileName.split(".").slice(-1)[0]) {
+      if (ext !== fileName.split('.').slice(-1)[0]) {
         await S3Client.deleteObject({
           Bucket: bucketName,
           Key: objectKey,
@@ -38,7 +38,7 @@ export const main = async (event: S3Event): Promise<void> => {
       }
 
       const newEvent = {
-        Source: "s4-events",
+        Source: 's4-events',
         DetailType: `FILE_UPLOADED`,
         Detail: JSON.stringify({
           bucketName,
